@@ -1,0 +1,34 @@
+@version: 3.6
+
+options {
+  keep-hostname(yes);
+  use-dns(no);
+  create_dirs(yes);
+  ts_format(iso);
+
+};
+
+template t_outputFormat {
+  template("<${PRI}> ${DATE} ${HOST} ${PROGRAM}: $MSG");
+};
+
+source s_net {
+    tcp(ip(0.0.0.0), port(514));
+    udp(ip(0.0.0.0), port(514));
+    unix-stream("/var/run/syslog-ng/syslog-ng.sock");
+};
+
+destination d_udpOutput {
+  udp("DESTINATION_IP" port(DESTINATION_PORT) template(t_outputFormat));
+};
+
+destination logfiles {
+    file("/var/log/syslog-ng/$PROGRAM/$PROGRAM.log");
+};
+
+log {
+  #source(s_tcpInput);
+  source(s_net);
+  #destination(logfiles);
+  destination(d_udpOutput);
+};
