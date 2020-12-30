@@ -8,7 +8,7 @@ services:
     restart: always
     #image: registry.altec.com.ar/syslog-ng/syslog-ng:1
     ports:
-      - 5514:514/udp
+      - 514:514/udp
     volumes:
       - ./logs:/var/log/syslog-ng
       - ./config/syslog-ng.conf:/etc/syslog-ng/syslog-ng.conf
